@@ -1,6 +1,6 @@
 # Vibe Coding Workshop — Dosyalar
 
-**İTÜ ACM · 3 Kasım 2026 · Med A**
+**İTÜ ACM · 3 Kasım 2026**
 
 Yapay zekâ ile bir fikri, kod bilmeden de çalışan ve yayında olan bir web sitesine dönüştürmek için ihtiyacın olan her şey burada. İki dosyayı bir klasöre koyup bir AI kodlama ajanına tek cümlelik bir komut veriyorsun, gerisini ajan yapıyor.
 
@@ -13,7 +13,6 @@ Yapay zekâ ile bir fikri, kod bilmeden de çalışan ve yayında olan bir web s
 | `ai-agent-proje-kurulum-yonergesi.txt` | AI ajanına projeyi **nasıl** kuracağını anlatan kurallar: teknik yığın, klasör yapısı, güvenlik, seninle nasıl konuşacağı. Her projede aynı kalır, değiştirmene gerek yok. |
 | `ornek-PRD-sablonu.md` | Fikrini anlatacağın **doldurulabilir şablon**. Her bölümde açıklama ve örnek var. |
 | `not-defteri-proje-PRD.md` | Workshop'ta canlı geliştirdiğimiz not defteri uygulamasının **doldurulmuş PRD'si**. Şablonu doldururken örnek olarak bak. |
-| `sunum-PRD.md` | Workshop sunumunun planı: bölümler, slayt içerikleri, süreler ve konuşma notları. |
 | `not-defteri-uygulama/` | Workshop'ta yapılan uygulamanın kodları *(workshop sonrası eklenecek)*. |
 
 ---
