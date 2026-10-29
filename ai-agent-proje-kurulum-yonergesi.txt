@@ -1,0 +1,261 @@
+AI AGENT PROJE KURULUM YÖNERGESİ
+================================
+Sürüm: 1.0 · İTÜ ACM Vibe Coding Workshop
+
+Bu dosya sana (AI kodlama ajanına) yazılmıştır. Kullanıcı seninle birlikte
+bir web uygulaması geliştirecek. Uygulamanın NE olduğunu PRD.md dosyası
+anlatır; bu dosya ise uygulamayı NASIL kuracağını anlatır. İkisi
+çeliştiğinde PRD.md'deki ürün kararı geçerlidir, teknik kurallar için bu
+dosya geçerlidir.
+
+
+1. KULLANICI HAKKINDA
+---------------------
+- Kullanıcı hiç kod bilmiyor olabilir. Onunla Türkçe, sade ve kısa
+  cümlelerle konuş. Teknik terim kullanman gerekirse bir kez, parantez
+  içinde tek cümleyle açıkla.
+- Kullanıcıya kod göstermek yerine ne yaptığını ve neden yaptığını anlat.
+- Kullanıcının yapması gereken bir şey olduğunda (program kurmak, hesap
+  açmak, anahtar almak, bir ayarı değiştirmek) adımları numaralı liste
+  halinde ver: hangi siteye gidecek, hangi butona basacak, neyi
+  kopyalayıp nereye yapıştıracak. "Şunu ayarla" deyip bırakma.
+- Kullanıcıdan bir bilgi istediğinde neden gerektiğini tek cümleyle söyle.
+
+
+2. ÇALIŞMA AKIŞI
+----------------
+Adım 1 — Oku ve anla
+  - PRD.md dosyasını baştan sona oku. Dosya yoksa kullanıcıdan ürün
+    fikrini anlatmasını iste ve kısa bir PRD.md oluşturup onayını al.
+  - PRD'de eksik ama kritik bilgi varsa (uygulamanın temel davranışını
+    değiştirecek türden), TÜM sorularını tek mesajda, en fazla 5 soru
+    olarak sor. Küçük kararlar için soru sorma; makul bir varsayım yap
+    ve sonda raporla.
+  - PRD yeterince açıksa soru sormadan devam et.
+
+Adım 2 — Ortamı kontrol et
+  - `node -v` ve `npm -v` ile Node.js'in kurulu olduğunu doğrula.
+    Güncel LTS sürümü gerekir. Kurulu değilse ya da eskiyse, kullanıcıya
+    işletim sistemine göre (Windows / macOS / Linux) nodejs.org'dan
+    kurulum adımlarını anlat ve kurulumdan sonra terminali yeniden
+    açmasını söyle.
+  - `git --version` ile Git'i kontrol et. Yoksa kurulumunu anlat.
+
+Adım 3 — Kısa plan
+  - Başlamadan önce 5–8 maddelik bir plan yaz: hangi ekranlar, hangi
+    bileşenler, veri nerede saklanacak. Plan bilgi amaçlıdır; kullanıcı
+    itiraz etmedikçe onay beklemeden devam et.
+
+Adım 4 — Kurulum ve geliştirme
+  - Projeyi aşağıdaki teknik kurallara göre kur (Bölüm 3–5).
+  - Özellikleri PRD'deki öncelik sırasıyla geliştir. Her ana özellik
+    bittiğinde çalıştığını kontrol et ve bir git commit at
+    (ör. "Not ekleme özelliği eklendi").
+
+Adım 5 — Doğrula
+  - `npm run lint` hatasız geçmeli.
+  - `npm run build` hatasız geçmeli.
+  - PRD'deki kabul kriterlerini tek tek kontrol et.
+  - Hata varsa kullanıcıya göstermeden önce kendin düzelt.
+
+Adım 6 — Teslim
+  - Geliştirme sunucusunu başlat (`npm run dev`) ve kullanıcıya hangi
+    adresi tarayıcıda açacağını söyle.
+  - Bölüm 8'deki formatta kısa bir rapor ver.
+
+
+3. TEKNİK YIĞIN
+---------------
+Aksini PRD.md açıkça istemedikçe şunları kullan:
+  - React (arayüz)
+  - Vite (proje kurulumu ve geliştirme sunucusu) — `npm create vite@latest`
+    ile React şablonu
+  - JavaScript (TypeScript yalnızca PRD isterse)
+  - Tailwind CSS (stil) — güncel sürümün resmi Vite kurulum yöntemiyle
+  - ESLint (kod denetimi) — Vite şablonundaki yapılandırmayı koru
+  - Vercel (yayınlama)
+
+Kurallar:
+  - Paketlerin güncel kararlı sürümlerini kullan. Bir kurulum adımından
+    emin değilsen, ezberden yazmak yerine paketin resmi dokümantasyonunu
+    kontrol et.
+  - Gereksiz paket ekleme. Bir paket eklemeden önce aynı işin birkaç
+    satır kodla yapılıp yapılamayacağını düşün.
+  - Sayfa geçişi gerekiyorsa react-router kullan; tek sayfalık uygulamada
+    kullanma.
+  - Varsayılan: uygulama tamamen frontend'dir ve Vercel'de yayınlanır.
+    Veritabanı, giriş sistemi veya sunucu yalnızca Bölüm 5'teki karar
+    sırasına göre gerçekten gerekiyorsa eklenir.
+
+
+4. KLASÖR YAPISI
+----------------
+Kodu işlevine göre küçük, tek sorumluluklu parçalara böl. Temel yapı:
+
+  proje-adi/
+  ├── PRD.md
+  ├── README.md
+  ├── public/                 statik dosyalar (favicon vb.)
+  └── src/
+      ├── main.jsx            giriş noktası
+      ├── App.jsx             ana düzen, sayfaları birleştirir
+      ├── index.css           Tailwind ve global stiller
+      ├── components/         tekrar kullanılan arayüz parçaları
+      │   └── ui/             buton, modal, input gibi temel parçalar
+      ├── features/           özellik bazlı klasörler (ör. notes/)
+      │   └── <özellik>/      o özelliğe ait bileşenler ve mantık
+      ├── hooks/              özel React hook'ları (useNotes vb.)
+      ├── services/           veri saklama, dış servislere erişim
+      ├── utils/              küçük yardımcı fonksiyonlar
+      └── constants/          sabit değerler, ayarlar
+
+Kurallar:
+  - Bir dosya ~150 satırı geçiyorsa böl.
+  - Bileşen dosyaları PascalCase (NoteCard.jsx), diğerleri camelCase
+    (formatDate.js).
+  - Veri saklama mantığı bileşenlerin içinde değil, services/ altında
+    olmalı. Böylece ileride saklama yöntemi değişirse tek yer değişir.
+  - Kullanılmayan dosya, bileşen ve import bırakma (Vite şablonundan
+    gelen örnek logo ve sayaç kodları dahil).
+
+
+5. VERİ SAKLAMA VE BACKEND KARARI
+---------------------------------
+En basit çözüm her zaman önce gelir. Aşağıdaki sırayla karar ver ve bir
+üst seviyeye ancak alttaki seviye PRD'yi karşılamıyorsa çık:
+
+  Seviye 1 — Sadece frontend (VARSAYILAN)
+    Ne zaman: Veri tek kullanıcıya ait ve tek cihazda kalabilir.
+    Nasıl: localStorage / IndexedDB (aşağıdaki 5.1). Yayın: Vercel.
+
+  Seviye 2 — Frontend + Supabase
+    Ne zaman: PRD şunlardan birini istiyorsa: kullanıcı hesabı/giriş,
+    veriyi birden fazla kullanıcı arasında paylaşma, aynı verinin farklı
+    cihazlarda görünmesi, dosyaların kalıcı olarak bulutta saklanması.
+    Nasıl: Supabase Auth (giriş), Supabase veritabanı (Postgres),
+    Supabase Storage (dosyalar). Frontend yine Vercel'de, ayrı sunucu yok.
+    Zorunlu güvenlik kuralları:
+      - Frontend'de yalnızca Supabase'in herkese açık (anon/publishable)
+        anahtarı kullanılır. service_role/secret anahtarı ASLA frontend'e,
+        `VITE_` değişkenine veya git'e girmez.
+      - Her tabloda Row Level Security (RLS) açık olmalı ve kullanıcı
+        yalnızca kendi verisine erişebilmeli. RLS kapalı tablo bırakma.
+      - Tablo oluşturma ve RLS kurallarını SQL dosyası olarak projede
+        sakla (ör. supabase/schema.sql) ve kullanıcıya Supabase
+        panelinde "SQL Editor"e nasıl yapıştıracağını adım adım anlat.
+
+  Seviye 3 — Frontend + ayrı sunucu (Render)
+    Ne zaman: Supabase'in tek başına çözemediği sunucu tarafı mantık
+    gerekiyorsa: gizli kalması gereken bir API anahtarıyla dış servis
+    çağırmak (ör. bir yapay zekâ API'si), zamanlanmış işler, ağır işlem.
+    Nasıl: Node.js (Express) sunucusu, Render'da "Web Service" olarak
+    yayınlanır. Gizli anahtarlar yalnızca Render'ın "Environment"
+    ayarlarında durur. Frontend Vercel'de kalır ve sunucuya istek atar;
+    CORS'u yalnızca frontend'in adresine izin verecek şekilde ayarla.
+    Kullanıcıya, ücretsiz planda sunucunun bir süre kullanılmayınca
+    uykuya geçebileceğini ve ilk isteğin yavaş olabileceğini söyle.
+    Klasör yapısı: frontend kodu `client/`, sunucu kodu `server/` altında.
+
+  Kurallar:
+    - Seviye 2 veya 3'e çıkmadan önce kullanıcıya nedenini tek cümleyle
+      açıkla, ek olarak açması gereken hesapları söyle ve onayını al.
+      Kullanıcı istemezse daha basit seviyede kalan bir alternatif öner.
+    - "İleride lazım olabilir" diye veritabanı, giriş sistemi veya sunucu
+      ekleme. PRD istemiyorsa yoktur.
+    - Seviye 2'de ayrı sunucu kurma; Supabase yetiyorsa Render gereksizdir.
+
+5.1 Sadece frontend projelerde veri saklama
+  - Küçük metin verisi ve ayarlar: localStorage.
+  - Dosya, görsel veya büyük veri: IndexedDB (localStorage ~5 MB ile
+    sınırlıdır, dosya saklamak için uygun değildir). Küçük bir yardımcı
+    paket (ör. idb veya idb-keyval) kullanılabilir.
+  - Dosya yüklemede boyut sınırı koy ve sınır aşılırsa kullanıcıya anlaşılır
+    bir mesaj göster.
+  - Veri sadece o tarayıcıda durur; bunu uygulama içinde kısa bir bilgi
+    notuyla kullanıcıya belirt. PRD izin veriyorsa yedek indirme/yükleme
+    (JSON) özelliği ekle.
+  - Okuma/yazma işlemlerini try/catch ile koru; depolama hatası
+    uygulamayı çökertmemeli.
+
+
+6. ARAYÜZ VE KALİTE
+-------------------
+  - Mobil öncelikli ve duyarlı (responsive) tasarım: telefon, tablet ve
+    masaüstünde düzgün görünmeli, yatay kaydırma olmamalı.
+  - Her liste için boş durum ("Henüz not yok — ilkini ekle"), her işlem
+    için yükleniyor ve hata durumu tasarla.
+  - Silme gibi geri alınamaz işlemlerden önce onay iste.
+  - Erişilebilirlik: anlamlı HTML etiketleri, butonlarda erişilebilir
+    isimler, yeterli renk kontrastı, klavye ile kullanılabilirlik.
+  - Lorem ipsum veya "TODO" bırakma. Örnek veri gerekiyorsa gerçekçi ve
+    Türkçe olsun.
+  - Arayüz metinleri Türkçe olsun (PRD aksini söylemedikçe).
+  - Bir markayı (logo, isim, birebir tasarım) kopyalama; PRD bir
+    uygulamaya "benzer" diyorsa genel düzeni ve hissi al, kendi
+    tasarımını üret.
+
+
+7. GÜVENLİK VE GİZLİ BİLGİLER
+-----------------------------
+  - API anahtarı gibi gizli bilgileri kodun içine yazma. `.env.local`
+    dosyasına koy ve bu dosyanın `.gitignore`'da olduğundan emin ol.
+  - Vite'ta `VITE_` ile başlayan değişkenler tarayıcıya gönderilir, yani
+    herkes görebilir. Gizli kalması gereken bir anahtar frontend'e
+    konamaz; böyle bir durum varsa kullanıcıya açıkla ve alternatif öner.
+  - Kullanıcıdan bir API anahtarı gerekiyorsa: hangi siteden, hangi
+    menüden alınacağını adım adım anlat; anahtarı sohbete değil,
+    `.env.local` dosyasına yapıştırmasını söyle; Vercel'de aynı değeri
+    "Environment Variables" kısmına nasıl ekleyeceğini anlat.
+  - Proje klasörü dışındaki dosyaları silme veya değiştirme. Global paket
+    kurmadan önce kullanıcıya sor.
+
+
+8. GIT VE YAYINLAMA
+-------------------
+  - Projede `git init` yap, uygun bir `.gitignore` (node_modules, dist,
+    .env*) olduğundan emin ol, her ana adımda anlamlı commit at.
+  - Kullanıcı yayınlamak isterse Vercel'i adım adım anlat:
+      Yol A (önerilen): GitHub'da depo oluştur → projeyi push et →
+        vercel.com'da GitHub ile giriş → "Add New → Project" → depoyu
+        seç → "Deploy". Vite otomatik tanınır.
+      Yol B: terminalde `npx vercel` ve ekrandaki soruları yanıtla.
+  - react-router kullanıldıysa, sayfa yenilemede 404 almamak için tüm
+    yolları index.html'e yönlendiren bir vercel.json ekle.
+  - Supabase kullanıldıysa: Supabase URL'si ve anon/publishable
+    anahtarını Vercel'de "Environment Variables" kısmına eklemeyi anlat.
+    Supabase Auth'ta "Site URL" ve yönlendirme adreslerine Vercel linkini
+    eklemeyi unutma, yoksa giriş canlı sitede çalışmaz.
+  - Render kullanıldıysa: önce sunucuyu Render'da yayınla, verdiği
+    adresi frontend'in ortam değişkenine yaz, sonra frontend'i Vercel'de
+    yayınla.
+  - Her adımda kullanıcının ekranda ne göreceğini söyle.
+
+
+9. README.md
+------------
+Proje bitince Türkçe, kısa bir README.md yaz:
+  - Uygulama ne yapar (2–3 cümle)
+  - Bilgisayarda nasıl çalıştırılır (`npm install`, `npm run dev`)
+  - Klasör yapısı (kısa)
+  - Nasıl yayınlanır
+  - Bilinen sınırlamalar
+
+
+10. BİTİŞ RAPORU
+----------------
+İş bitince kullanıcıya şu formatta kısa bir mesaj yaz (kod yok):
+
+  ✅ Ne yaptım: (3–5 madde, sade dille)
+  ▶️ Nasıl açarsın: (tarayıcıda açılacak adres)
+  🧩 Yaptığım varsayımlar: (PRD'de olmayıp kendi karar verdiklerin)
+  ⚠️ Sınırlamalar: (varsa)
+  👉 Önerilen sonraki adım: (tek bir öneri, ör. "Vercel'de yayınlayalım mı?")
+
+
+11. YAPMA
+---------
+  - PRD'de olmayan büyük özellikler ekleme. Aklına iyi bir fikir gelirse
+    sonda öneri olarak yaz.
+  - Hata mesajlarını kullanıcıya olduğu gibi yapıştırıp "ne yapayım" deme;
+    önce kendin çöz, çözemezsen sorunu sade dille anlat.
+  - Çalışmayan kodu "bitti" diye teslim etme.
